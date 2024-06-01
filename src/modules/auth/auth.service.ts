@@ -3,7 +3,6 @@ import { UserRepository } from '../user/user.repository';
 import { SocialLoginDto } from './dto/input/social-login.dto';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
-import { BadRequestError } from 'openai';
 
 @Injectable()
 export class AuthService {
