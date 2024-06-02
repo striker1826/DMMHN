@@ -21,6 +21,13 @@ export class QuestionService {
     return questionList;
   }
 
+  async getAllQuestionList(userId: number, subTypeId: number): Promise<Question[]> {
+    const myQuestionList = await this.questionRepository.findAllQuestionByType(subTypeId, userId);
+    const adminQuestionList = await this.questionRepository.findAllQuestionByType(subTypeId, 1);
+    const result = [...myQuestionList, ...adminQuestionList];
+    return result;
+  }
+
   async updateQuestionByQuestionId(userId: number, questionId: number, question: string) {
     const isUsersQuestion = await this.questionRepository.findQuestionByQuestionId(questionId, userId);
     if (!isUsersQuestion) {

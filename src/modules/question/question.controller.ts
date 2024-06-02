@@ -9,7 +9,6 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -66,6 +65,9 @@ export class QuestionController {
     return questionList;
   }
 
+  @ApiOperation({
+    description: '질문을 수정하는 API 입니다.',
+  })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   @ApiOkResponse()
@@ -77,6 +79,9 @@ export class QuestionController {
     return;
   }
 
+  @ApiOperation({
+    description: '질문을 삭제하는 API 입니다.',
+  })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   @ApiOkResponse()
@@ -86,5 +91,19 @@ export class QuestionController {
   async deleteQuestionByQuestionId(@User() user: number, @Param() params: QuestionIdDto) {
     await this.questionService.deleteQuestionByQuestionId(user, params.question_id);
     return;
+  }
+
+  @ApiOperation({
+    description: '기존 질문과 내가 등록한 질문을 같이 가져오는 API 입니다.',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @Get('all/:subtype_id')
+  async getAllQuestions(@User() user: number, @Param() params: SubTypeDto) {
+    const questionList = await this.questionService.getAllQuestionList(user, params.subtype_id);
+    return questionList;
   }
 }
