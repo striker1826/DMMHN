@@ -10,12 +10,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({
-    description: '카카오에서 받은 인증 코드로 accessToken을 받을 수 있는 API 입니다.',
+    description: '유저의 access_token으로 유저의 정보를 가져오는 API 입니다.',
   })
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   @UseGuards(AuthGuard('jwt'))
-  @Get('token')
+  @Get('info')
   async getUsersByToken(@User() userId: number) {
     const user = await this.userService.getUserByUserId(userId);
     return user;
