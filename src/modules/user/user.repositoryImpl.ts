@@ -20,4 +20,9 @@ export class UserRepositoryImpl implements UserRepository {
     const user = await this.userModel.findOne({ where: { kakaoId } });
     return user;
   }
+
+  async findUserByUserId(userId: number): Promise<User> {
+    const user = await this.userModel.findOne({ where: { userId } });
+    return user;
+  }
 }
