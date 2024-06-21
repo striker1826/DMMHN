@@ -47,7 +47,7 @@ export class AuthService {
 
       return { access_token, refresh_token };
     } catch (err) {
-      throw new UnauthorizedException('올바른 인증코드가 아닙니다.');
+      throw new UnauthorizedException(err);
     }
   }
 
