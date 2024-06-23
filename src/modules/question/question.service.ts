@@ -1,6 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { QuestionRepositroy } from './question.repository';
 import { Question } from 'src/entities/question.entity';
+import { shuffledArray } from 'src/utils/shuffle';
 
 @Injectable()
 export class QuestionService {
@@ -24,7 +25,9 @@ export class QuestionService {
   async getAllQuestionList(userId: number, subTypeId: number): Promise<Question[]> {
     const myQuestionList = await this.questionRepository.findAllQuestionByType(subTypeId, userId);
     const adminQuestionList = await this.questionRepository.findAllQuestionByType(subTypeId, 1);
-    const result = [...myQuestionList, ...adminQuestionList];
+    const questions = [...myQuestionList, ...adminQuestionList];
+    const suffledQuestions = shuffledArray(questions);
+    const result = suffledQuestions.slice(0, 10);
     return result;
   }
 
