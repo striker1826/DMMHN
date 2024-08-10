@@ -64,4 +64,46 @@ export class AuthService {
 
     return token;
   }
+
+  async kakaoLoginLocal({ code }: SocialLoginDto): Promise<{ access_token: string; refresh_token: string }> {
+    console.log(code);
+    try {
+      const kakaoTokenRes = await axios.post(
+        'https://kauth.kakao.com/oauth/token',
+        {
+          grant_type: 'authorization_code',
+          client_id: process.env.KAKAO_CLIENT_ID,
+          redirect_uri: process.env.KAKAO_REDIRECT_URI_LOCAL,
+          client_secret: process.env.KAKAO_SECRET_KEY,
+          code,
+        },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' } },
+      );
+
+      const kakaoToken = kakaoTokenRes.data.access_token;
+
+      const kakaoUserRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+          Authorization: `Bearer ${kakaoToken}`,
+        },
+      });
+      let user = await this.userRepository.findUserByKakaoId(kakaoUserRes.data.id);
+      if (!user) {
+        user = await this.userRepository.createUser(
+          kakaoUserRes.data.id,
+          kakaoUserRes.data.properties.nickname,
+          kakaoUserRes.data.properties.profile_image,
+        );
+      }
+
+      const access_token = this.generateJwt(user.userId, 'ACCESS_TOKEN');
+      const refresh_token = this.generateJwt(user.userId, 'REFRESH_TOKEN');
+
+      return { access_token, refresh_token };
+    } catch (err) {
+      console.log(err);
+      throw new UnauthorizedException('올바른 인증코드가 아닙니다.');
+    }
+  }
 }

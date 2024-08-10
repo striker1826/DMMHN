@@ -28,7 +28,7 @@ export class AuthController {
   @ApiUnauthorizedResponse(KakaoLoginResponse.unAuthorized)
   @Post('v2/kakao')
   async kakaoLoginTest(@Body() body: SocialLoginDto, @Res() res: Response) {
-    const tokens = await this.authService.kakaoLogin(body);
+    const tokens = await this.authService.kakaoLoginLocal(body);
     res.cookie('accessToken', tokens.access_token, { httpOnly: true, sameSite: 'none', secure: true });
     res.cookie('refreshToken', tokens.refresh_token, { httpOnly: true, sameSite: 'none', secure: true });
     return res.json(tokens).status(201);
