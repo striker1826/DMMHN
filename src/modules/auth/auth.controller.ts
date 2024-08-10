@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SocialLoginDto } from './dto/input/social-login.dto';
 import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { KakaoLoginResponse } from 'src/common/swagger/auth/kakaoLogin';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -18,5 +19,18 @@ export class AuthController {
   async kakaoLogin(@Body() body: SocialLoginDto) {
     const tokens = await this.authService.kakaoLogin(body);
     return tokens;
+  }
+
+  @ApiOperation({
+    description: '카카오에서 받은 인증 코드로 accessToken을 받을 수 있는 테스트 API 입니다.',
+  })
+  @ApiCreatedResponse(KakaoLoginResponse.created)
+  @ApiUnauthorizedResponse(KakaoLoginResponse.unAuthorized)
+  @Post('v2/kakao')
+  async kakaoLoginTest(@Body() body: SocialLoginDto, @Res() res: Response) {
+    const tokens = await this.authService.kakaoLogin(body);
+    res.cookie('accessToken', tokens.access_token, { httpOnly: true, sameSite: 'none', secure: true });
+    res.cookie('refreshToken', tokens.refresh_token, { httpOnly: true, sameSite: 'none', secure: true });
+    return res.json(tokens).status(201);
   }
 }
