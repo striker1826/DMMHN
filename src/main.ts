@@ -3,9 +3,13 @@ import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as expressBasicAuth from 'express-basic-auth';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   app.enableCors({
     origin: true,
     credentials: true,
@@ -20,7 +24,6 @@ async function bootstrap() {
       },
     }),
   );
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const options = new DocumentBuilder()
     .setTitle('DMMHN')

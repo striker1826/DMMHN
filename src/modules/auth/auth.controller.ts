@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SocialLoginDto } from './dto/input/social-login.dto';
-import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { KakaoLoginResponse } from 'src/common/swagger/auth/kakaoLogin';
 import { Response } from 'express';
 
@@ -27,21 +27,19 @@ export class AuthController {
   @ApiCreatedResponse(KakaoLoginResponse.created)
   @ApiUnauthorizedResponse(KakaoLoginResponse.unAuthorized)
   @Post('v2/kakao')
-  async kakaoLoginTest(@Body() body: SocialLoginDto, @Res() res: Response) {
+  async kakaoLoginTest(@Body() body: SocialLoginDto, @Res({ passthrough: true }) res: Response) {
     const tokens = await this.authService.kakaoLoginLocal(body);
     res.cookie('accessToken', tokens.access_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24,
-      path: '/',
     });
     res.cookie('refreshToken', tokens.refresh_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/',
     });
     return res.json(tokens).status(200);
   }
