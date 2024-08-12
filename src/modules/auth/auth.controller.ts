@@ -32,15 +32,17 @@ export class AuthController {
     res.cookie('accessToken', tokens.access_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: true,
+      secure: false,
       maxAge: 1000 * 60 * 60 * 24,
+      path: '/',
     });
     res.cookie('refreshToken', tokens.refresh_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: true,
+      secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      path: '/',
     });
-    return res.json(tokens).status(201);
+    return res.json(tokens).status(200);
   }
 }
