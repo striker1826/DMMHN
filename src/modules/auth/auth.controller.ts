@@ -28,19 +28,19 @@ export class AuthController {
   @ApiUnauthorizedResponse(KakaoLoginResponse.unAuthorized)
   @Post('v2/kakao')
   async kakaoLoginTest(@Body() body: SocialLoginDto, @Res({ passthrough: true }) res: Response) {
-    const tokens = await this.authService.kakaoLoginLocal(body);
-    res.cookie('accessToken', tokens.access_token, {
+    const result = await this.authService.kakaoLoginLocal(body);
+    res.cookie('accessToken', result.access_token, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
-    res.cookie('refreshToken', tokens.refresh_token, {
+    res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-    return res.json(tokens).status(200);
+    return res.json(result).status(200);
   }
 }
