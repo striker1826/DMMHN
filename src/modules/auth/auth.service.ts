@@ -68,6 +68,7 @@ export class AuthService {
   async kakaoLoginLocal({
     code,
   }: SocialLoginDto): Promise<{ access_token: string; refresh_token: string; user: { profileImg: string } }> {
+    console.log(code);
     try {
       const kakaoTokenRes = await axios.post(
         'https://kauth.kakao.com/oauth/token',
