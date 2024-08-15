@@ -27,7 +27,7 @@ export class QuestionService {
     const adminQuestionList = await this.questionRepository.findAllQuestionByType(subTypeId, 1);
     const questions = [...myQuestionList, ...adminQuestionList];
     const suffledQuestions = shuffledArray(questions);
-    const result = suffledQuestions.slice(0, 3);
+    const result = suffledQuestions.slice(0, 5);
     return result;
   }
 
