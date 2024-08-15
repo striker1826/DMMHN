@@ -6,9 +6,19 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { QuestionModule } from 'src/modules/question/question.module';
+import { AnswerModule } from 'src/modules/answer/answer.module';
+import { GptModule } from 'src/modules/gpt/gpt.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, AuthModule, UserModule, QuestionModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+    QuestionModule,
+    AnswerModule,
+    GptModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

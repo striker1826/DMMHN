@@ -29,6 +29,9 @@ export class Question {
   @Column('bigint', { name: 'subTypeId', comment: '질문의 서브 타입' })
   subTypeId: number;
 
+  @Column('varchar', { name: 'speechText', comment: '질문의 발화 텍스트' })
+  speechText: string;
+
   @CreateDateColumn({ name: '생성 날짜' })
   createdAt: Date;
 
