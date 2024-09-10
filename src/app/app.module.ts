@@ -8,6 +8,7 @@ import { UserModule } from 'src/modules/user/user.module';
 import { QuestionModule } from 'src/modules/question/question.module';
 import { AnswerModule } from 'src/modules/answer/answer.module';
 import { GptModule } from 'src/modules/gpt/gpt.module';
+import { StackModule } from 'src/modules/stack/stack.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GptModule } from 'src/modules/gpt/gpt.module';
     QuestionModule,
     AnswerModule,
     GptModule,
+    StackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

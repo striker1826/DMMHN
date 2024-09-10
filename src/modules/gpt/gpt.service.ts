@@ -17,30 +17,17 @@ export class GptService {
   }): Promise<OpenAI.ChatCompletion> {
     console.log(prompt);
     return await this.openAiService.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: prompt.messages,
-      top_p: 1,
       temperature: 0,
-      max_tokens: 200,
+      max_tokens: 256,
+      top_p: 0.5,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      response_format: {
+        type: 'text',
+      },
     });
-    // const data = {
-    //   system:
-    //     '너는 이제부터 IT 기업의 기술 면접관이야. 지원자에게 질문을 하고, 지원자의 답변을 평가해서 점수를 매기고 해당 점수가 나온 이유를 같이 알려줘',
-    //   prompt: prompt,
-    //   max_tokens: 150,
-    //   n: 1,
-    //   stop: null,
-    //   temperature: 1,
-    // };
-
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   Authorization: `Bearer ${this.apiKey}`,
-    // };
-
-    // const answer = await axios.post(this.apiUrl, data, { headers: headers });
-    // console.log(answer);
-    // return answer;
   }
 
   getChatOpenaiResponse(message: OpenAI.ChatCompletion): {

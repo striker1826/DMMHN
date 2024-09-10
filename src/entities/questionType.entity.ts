@@ -1,13 +1,7 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Question } from './question.entity';
 import { SubType } from './subType.entity';
+import { Stack } from './stack';
 
 @Entity({ name: 'QuestionType' })
 export class QuestionType {
@@ -32,4 +26,7 @@ export class QuestionType {
 
   @OneToMany(() => SubType, (subType) => subType.QuestionType)
   SubType: SubType[];
+
+  @OneToMany(() => Stack, (stack) => stack.questionTypeId)
+  Stack: Stack[];
 }

@@ -16,7 +16,7 @@ async function bootstrap() {
   });
   app.use(
     //이 부분 추가
-    ['/api'], // docs(swagger end point)에 진입시
+    ['/api-docs'], // docs(swagger end point)에 진입시
     expressBasicAuth({
       challenge: true,
       users: {
