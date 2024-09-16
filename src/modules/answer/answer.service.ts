@@ -7,37 +7,33 @@ import { GradingDto } from './dto/gradingDto';
 export class AnswerService {
   constructor(private readonly gptService: GptService) {}
 
-  async getMessagesData(answerDto: GradingDto[]) {
-    const promptStringTypeList = answerDto.map(
-      (item) => `질문: ${item.question}. 답변: ${item.answer ? item.answer : '몰라요'}`,
-    );
+  async getMessagesData(body: { stacks: string[]; question: string; answer: string }) {
+    const stacksString = body.stacks.join(', ');
+    // const promptStringTypeList = answerDto.map(
+    //   (item) => `질문: ${item.question}. 답변: ${item.answer ? item.answer : '몰라요'}`,
+    // );
 
-    const role: 'assistant' | 'user' = 'assistant';
-    const promptGptTypeList = promptStringTypeList.map((prompt) => {
-      return { role, content: prompt };
+    // const role: 'assistant' | 'user' = 'assistant';
+    // const promptGptTypeList = promptStringTypeList.map((prompt) => {
+    //   return { role, content: prompt };
+    // });
+
+    // for (let i = 0; i < promptGptTypeList.length; i++) {
+    const response = await this.gptService.generateResponse({
+      messages: [
+        // { role: 'system', content: '' },
+        {
+          role: 'user',
+          content:
+            `keywords: ${stacksString}` +
+            process.env.OPENAI_SYSTEM_TEXT +
+            `$$${body.question}$$` +
+            `%%${body.answer}%%`,
+        },
+      ],
     });
 
-    let gradingResult = [];
-    for (let i = 0; i < promptGptTypeList.length; i++) {
-      const response = await this.gptService.generateResponse({
-        messages: [
-          {
-            role: 'user',
-            content: process.env.OPENAI_GRADING_SYSTEM_TEXT + promptStringTypeList[i],
-          },
-        ],
-      });
-
-      const result = this.gptService.getChatOpenaiResponse(response);
-
-      gradingResult.push({
-        question: answerDto[i].question,
-        answer: answerDto[i].answer,
-        score: result.result.message.content.split(' ')[1],
-      });
-    }
-
-    console.log(gradingResult);
-    return gradingResult;
+    const result = this.gptService.getChatOpenaiResponse(response);
+    return result;
   }
 }

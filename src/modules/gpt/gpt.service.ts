@@ -15,11 +15,10 @@ export class GptService {
   async generateResponse(prompt: {
     messages: { role: 'user' | 'system'; content: string }[];
   }): Promise<OpenAI.ChatCompletion> {
-    console.log(prompt);
     return await this.openAiService.chat.completions.create({
       model: 'gpt-4o',
       messages: prompt.messages,
-      temperature: 0,
+      temperature: 0.1,
       max_tokens: 256,
       top_p: 0.5,
       frequency_penalty: 0,

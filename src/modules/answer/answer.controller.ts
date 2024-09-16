@@ -8,10 +8,10 @@ import { AuthGuard } from '@nestjs/passport';
 export class AnswerController {
   constructor(private readonly answerService: AnswerService, private readonly gptService: GptService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post('grading')
-  async gradingAnswer(@Body() requestBody: GradingDto[]) {
-    const result = await this.answerService.getMessagesData(requestBody);
+  async gradingAnswer(@Body() body: { stacks: string[]; question: string; answer: string }) {
+    const result = await this.answerService.getMessagesData(body);
     return result;
   }
 }
