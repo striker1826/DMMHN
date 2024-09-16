@@ -13,7 +13,7 @@ export class AnswerController {
   // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ description: 'GPT API을 이용해서 면접 질문과 대답 처리하기' })
   @Post('grading')
-  async gradingAnswer(@Body() body: { stacks: string[]; question: string; answer: string }) {
+  async gradingAnswer(@Body() body: GradingDto) {
     const result = await this.answerService.getMessagesData(body);
     return result;
   }
