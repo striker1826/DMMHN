@@ -34,14 +34,14 @@ export class AuthController {
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
-      domain: 'localhost',
+      domain: 'http://localhost:3000',
     });
     res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: 'localhost',
+      domain: 'http://localhost:3000',
     });
     return res.json(result).status(200);
   }
