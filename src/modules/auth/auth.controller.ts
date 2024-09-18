@@ -34,6 +34,7 @@ export class AuthController {
       sameSite: 'none',
       secure: false,
       maxAge: 1000 * 60 * 60 * 24,
+      domain: 'localhost',
     });
     res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
