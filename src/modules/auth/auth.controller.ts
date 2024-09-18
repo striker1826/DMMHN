@@ -31,10 +31,10 @@ export class AuthController {
     const result = await this.authService.kakaoLoginLocal(body);
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'lax',
+      secure: false,
       maxAge: 1000 * 60 * 60 * 24,
-      domain: 'alstjq.shop',
+      domain: 'localhost',
     });
     res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
