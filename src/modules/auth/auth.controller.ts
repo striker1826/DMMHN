@@ -32,7 +32,7 @@ export class AuthController {
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24,
       domain: 'localhost',
     });
