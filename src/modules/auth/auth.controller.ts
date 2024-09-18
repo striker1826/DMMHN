@@ -32,9 +32,9 @@ export class AuthController {
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24,
-      domain: 'localhost',
+      domain: 'alstjq.shop',
     });
     res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
