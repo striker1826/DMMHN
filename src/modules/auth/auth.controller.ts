@@ -32,7 +32,7 @@ export class AuthController {
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: true,
+      secure: false,
       maxAge: 1000 * 60 * 60 * 24,
     });
     res.cookie('refreshToken', result.refresh_token, {
