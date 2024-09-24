@@ -12,6 +12,7 @@ export class GptService {
     });
   }
 
+  // gptAi로 질문 생성
   async generateResponse(prompt: {
     messages: { role: 'user' | 'system'; content: string }[];
   }): Promise<OpenAI.ChatCompletion> {
@@ -29,6 +30,7 @@ export class GptService {
     });
   }
 
+  // gpt로부터 받은 response 일관된 형식으로 포맷팅
   getChatOpenaiResponse(message: OpenAI.ChatCompletion): {
     success: boolean;
     result: OpenAI.ChatCompletion.Choice;

@@ -106,4 +106,19 @@ export class QuestionController {
     const questionList = await this.questionService.getAllQuestionList(user, params.subtype_id);
     return questionList;
   }
+
+  @ApiOperation({
+    description: 'AI 면접 꼬리질문의 첫 번째 질문을 가져오는 API 입니다.',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse()
+  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse()
+  @Get('/ai/first')
+  async getAiFirstQuestion(@Query('stacks') query: string) {
+    const questionOfStacks = await this.questionService.createAiFirstQuestion(query);
+    console.log(questionOfStacks);
+    return questionOfStacks;
+  }
 }

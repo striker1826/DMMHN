@@ -1,11 +1,15 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { QuestionRepositroy } from './question.repository';
 import { Question } from 'src/entities/question.entity';
 import { shuffledArray } from 'src/utils/shuffle';
+import { GptService } from '../gpt/gpt.service';
 
 @Injectable()
 export class QuestionService {
-  constructor(@Inject(QuestionRepositroy) private readonly questionRepository: QuestionRepositroy) {}
+  constructor(
+    @Inject(QuestionRepositroy) private readonly questionRepository: QuestionRepositroy,
+    private readonly gptService: GptService,
+  ) {}
 
   async createQuestion(userId: number, question: string, subTypeId: number): Promise<void> {
     await this.questionRepository.saveQuestion(question, userId, subTypeId);
@@ -49,5 +53,24 @@ export class QuestionService {
 
     await this.questionRepository.deleteQuestionByQuestionId(userId, questionId);
     return;
+  }
+
+  async createAiFirstQuestion(stackofString: string) {
+    const stackList = stackofString.split(',');
+    if (stackList.length > 3) {
+      throw new BadRequestException('stack은 3개를 초과할 수 없습니다.');
+    }
+
+    const response = await this.gptService.generateResponse({
+      messages: [
+        {
+          role: 'user',
+          content: `stacks: ${stackofString}` + process.env.OPENAI_FIRST_QUESTION_PROMPT,
+        },
+      ],
+    });
+
+    const result = this.gptService.getChatOpenaiResponse(response);
+    return result;
   }
 }
