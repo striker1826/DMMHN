@@ -19,7 +19,7 @@ export class GptService {
     return await this.openAiService.chat.completions.create({
       model: 'gpt-4o',
       messages: prompt.messages,
-      temperature: 1,
+      temperature: 0.5,
       max_tokens: 256,
       top_p: 0.5,
       frequency_penalty: 0,

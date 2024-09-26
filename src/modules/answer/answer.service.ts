@@ -28,7 +28,7 @@ export class AnswerService {
             `keywords: ${stacksString}` +
             process.env.OPENAI_SYSTEM_TEXT +
             `$$${body.question}$$` +
-            `%%${body.answer}%%`,
+            `%%${body.answer ? body.answer : '몰라요'}%%`,
         },
       ],
     });
