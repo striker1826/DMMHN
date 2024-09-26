@@ -34,6 +34,7 @@ export class AnswerService {
     });
 
     const result = this.gptService.getChatOpenaiResponse(response);
+    console.log(result);
     return result;
   }
 }
