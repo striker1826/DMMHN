@@ -9,4 +9,7 @@ export class GradingDto {
 
   @ApiProperty()
   stacks: string[];
+
+  @ApiProperty()
+  previousQuestions: string[];
 }
