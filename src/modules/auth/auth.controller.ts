@@ -35,6 +35,12 @@ export class AuthController {
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
+    res.cookie('profileImg', result.user.profileImg, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
     res.cookie('refreshToken', result.refresh_token, {
       httpOnly: true,
       sameSite: 'none',
