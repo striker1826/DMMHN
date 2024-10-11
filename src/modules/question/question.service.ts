@@ -83,6 +83,9 @@ export class QuestionService {
       }),
     );
 
-    return questionList;
+    const flattenedQuestionList = questionList.flat();
+    const randomQuestionList = shuffledArray(flattenedQuestionList);
+    const slicedRandomQuestionList = randomQuestionList.slice(0, 5);
+    return slicedRandomQuestionList;
   }
 }
