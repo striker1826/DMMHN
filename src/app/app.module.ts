@@ -9,6 +9,7 @@ import { QuestionModule } from 'src/modules/question/question.module';
 import { AnswerModule } from 'src/modules/answer/answer.module';
 import { GptModule } from 'src/modules/gpt/gpt.module';
 import { StackModule } from 'src/modules/stack/stack.module';
+import { GradingModule } from 'src/modules/grading/grading.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { StackModule } from 'src/modules/stack/stack.module';
     AnswerModule,
     GptModule,
     StackModule,
+    GradingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
