@@ -20,6 +20,7 @@ export class GradingController {
     });
 
     const result = this.gptService.getChatOpenaiResponse(gptResponse);
-    return result;
+    const resultToJson = JSON.parse(result.result.message.content);
+    return resultToJson;
   }
 }
