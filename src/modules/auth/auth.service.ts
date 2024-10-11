@@ -12,7 +12,6 @@ export class AuthService {
   ) {}
 
   async kakaoLogin({ code }: SocialLoginDto): Promise<{ access_token: string; refresh_token: string }> {
-    console.log(code);
     try {
       const kakaoTokenRes = await axios.post(
         'https://kauth.kakao.com/oauth/token',
@@ -48,7 +47,6 @@ export class AuthService {
 
       return { access_token, refresh_token };
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException('올바른 인증코드가 아닙니다.');
     }
   }
@@ -68,7 +66,6 @@ export class AuthService {
   async kakaoLoginLocal({
     code,
   }: SocialLoginDto): Promise<{ access_token: string; refresh_token: string; user: { profileImg: string } }> {
-    console.log(code);
     try {
       const kakaoTokenRes = await axios.post(
         'https://kauth.kakao.com/oauth/token',
@@ -104,7 +101,6 @@ export class AuthService {
 
       return { access_token, refresh_token, user: { profileImg: user.profileImg } };
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException('올바른 인증코드가 아닙니다.');
     }
   }
