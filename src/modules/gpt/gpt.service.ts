@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import OpenAI from 'openai';
+import { createReadStream } from 'fs';
 
 @Injectable()
 export class GptService {
@@ -39,5 +40,14 @@ export class GptService {
       success: true,
       result: message?.choices?.length && message?.choices[0],
     };
+  }
+
+  async stt(audioFile: string) {
+    const transcription = await this.openAiService.audio.transcriptions.create({
+      file: createReadStream(audioFile),
+      model: 'whisper-1',
+    });
+
+    return transcription;
   }
 }
