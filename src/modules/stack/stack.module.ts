@@ -5,9 +5,10 @@ import { StackRepository } from './stack.repository';
 import { StackRepositoryImpl } from './stack.repositoryImpl';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Stack } from 'src/entities/stack';
+import { QuestionType } from 'src/entities/questionType.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Stack])],
+  imports: [TypeOrmModule.forFeature([Stack, QuestionType])],
   controllers: [StackController],
   providers: [StackService, { provide: StackRepository, useClass: StackRepositoryImpl }],
 })
