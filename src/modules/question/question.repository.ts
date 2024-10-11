@@ -5,6 +5,7 @@ export interface QuestionRepositroy {
   findAllQuestionByType(subTypeId: number, userId: number): Promise<Question[]>;
   findQuestionsByUserId(userId: number): Promise<Question[]>;
   findQuestionByQuestionId(questionId: number, userId: number): Promise<Question>;
+  findAllQuestionByStacks(stacks: number): Promise<Question[]>;
   updateQuestionByUserId(userId: number, questionId: number, question: string): Promise<void>;
   deleteQuestionByQuestionId(userId: number, questionId: number): Promise<void>;
 }

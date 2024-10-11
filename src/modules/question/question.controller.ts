@@ -108,6 +108,20 @@ export class QuestionController {
   }
 
   @ApiOperation({
+    description: '선택한 기술 stack에 해당하는 질문들을 가져오는 API 입니다.',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @Get()
+  async getQuestionListByStack(@Query('stacks') stacks: string) {
+    const questionList = await this.questionService.getQuestionListByStacks(stacks);
+    return questionList;
+  }
+
+  @ApiOperation({
     description: 'AI 면접 꼬리질문의 첫 번째 질문을 가져오는 API 입니다.',
   })
   @UseGuards(AuthGuard('jwt'))

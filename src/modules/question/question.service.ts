@@ -73,4 +73,16 @@ export class QuestionService {
     const result = this.gptService.getChatOpenaiResponse(response);
     return result;
   }
+
+  async getQuestionListByStacks(stacks: string) {
+    const stackList = stacks.split(',');
+
+    const questionList = await Promise.all(
+      stackList.map(async (stack) => {
+        return this.questionRepository.findAllQuestionByStacks(parseInt(stack));
+      }),
+    );
+
+    return questionList;
+  }
 }
