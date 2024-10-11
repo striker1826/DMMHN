@@ -32,6 +32,9 @@ export class Question {
   @Column('varchar', { name: 'speechText', comment: '질문의 발화 텍스트' })
   speechText: string;
 
+  @Column('bigint', { name: 'questionTypeId', comment: '질문 타입의 아이디' })
+  questionTypeId: number;
+
   @CreateDateColumn({ name: '생성 날짜' })
   createdAt: Date;
 
@@ -52,6 +55,10 @@ export class Question {
   @JoinColumn([{ name: 'subTypeId', referencedColumnName: 'subTypeId' }])
   SubType: SubType;
 
-  @ManyToOne(() => QuestionType, (questionType) => questionType.Question)
+  @ManyToOne(() => QuestionType, (questionType) => questionType.Question, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'questionTypeId', referencedColumnName: 'questionTypeId' }])
   QuestionType: QuestionType;
 }
