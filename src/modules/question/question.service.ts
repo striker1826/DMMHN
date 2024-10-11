@@ -76,6 +76,7 @@ export class QuestionService {
 
   async getQuestionListByStacks(stacks: string) {
     const stackList = stacks.split(',');
+    if (stackList.length > 3) throw new BadRequestException('stack은 3개를 초과할 수 없습니다.');
 
     const questionList = await Promise.all(
       stackList.map(async (stack) => {
@@ -85,6 +86,10 @@ export class QuestionService {
 
     const flattenedQuestionList = questionList.flat();
     const randomQuestionList = shuffledArray(flattenedQuestionList);
+    if (randomQuestionList.length < 5) {
+      return randomQuestionList;
+    }
+
     const slicedRandomQuestionList = randomQuestionList.slice(0, 5);
     return slicedRandomQuestionList;
   }
