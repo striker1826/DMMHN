@@ -34,7 +34,6 @@ export class QuestionRepositoryImpl implements QuestionRepositroy {
 
   async findAllQuestionByStacks(stack: number): Promise<Question[]> {
     const questionList = await this.questionModel.find({ where: { questionTypeId: stack } });
-    console.log(questionList);
     return questionList;
   }
 

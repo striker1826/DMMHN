@@ -132,7 +132,6 @@ export class QuestionController {
   @Get('/ai/first')
   async getAiFirstQuestion(@Query('stacks') query: string) {
     const questionOfStacks = await this.questionService.createAiFirstQuestion(query);
-    console.log(questionOfStacks);
     return questionOfStacks;
   }
 }
