@@ -1,11 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { EvaluationInputDto } from './dto/input/evaluation.dto';
 import { GptService } from '../gpt/gpt.service';
+import { OverallRatingInputDto } from './dto/input/overallRating.dto';
+import { GradingService } from './grading.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('grading')
 export class GradingController {
-  constructor(private readonly gptService: GptService) {}
+  constructor(private readonly gradingService: GradingService, private readonly gptService: GptService) {}
 
   @ApiOperation({ description: 'GPT API에게 답변의 평가를 요청하는 API' })
   @Post('evaluation')
@@ -22,5 +25,13 @@ export class GradingController {
     const result = this.gptService.getChatOpenaiResponse(gptResponse);
     const resultToJson = JSON.parse(result.result.message.content);
     return resultToJson;
+  }
+
+  @ApiOperation({ description: 'GPT API에게 면접의 전체적인 평가를 요청하는 API' })
+  @UseGuards(AuthGuard('jwt'))
+  @Post('evaluation/overall')
+  async overallRating(@Body() evaluationList: OverallRatingInputDto[]) {
+    const overallRating = await this.gradingService.generateOverallRating(evaluationList);
+    return overallRating;
   }
 }
