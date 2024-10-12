@@ -49,6 +49,6 @@ export class GptService {
       response_format: 'text',
     });
 
-    return transcription;
+    return { text: transcription };
   }
 }
