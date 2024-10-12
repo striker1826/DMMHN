@@ -47,6 +47,7 @@ export class GptService {
       model: 'whisper-1',
       language: 'ko',
       response_format: 'text',
+      temperature: 0.1,
     });
 
     return { text: transcription };
