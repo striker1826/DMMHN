@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosResponse } from 'axios';
 import OpenAI from 'openai';
 import { createReadStream } from 'fs';
 
@@ -44,8 +43,10 @@ export class GptService {
 
   async stt(audioFile: string) {
     const transcription = await this.openAiService.audio.transcriptions.create({
-      file: createReadStream(audioFile),
+      file: createReadStream(audioFile), // 변환된 파일로 스트림 생성
       model: 'whisper-1',
+      language: 'ko',
+      response_format: 'text',
     });
 
     return transcription;
