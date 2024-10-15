@@ -12,19 +12,22 @@ export class GradingController {
 
   @ApiOperation({ description: 'GPT API에게 답변의 평가를 요청하는 API' })
   @Post('evaluation')
-  async evaluationByAnswer(@Body() evaluationDto: EvaluationInputDto) {
-    const gptResponse = await this.gptService.generateResponse({
-      messages: [
-        {
-          role: 'user',
-          content: `${process.env.OPENAI_GRADING_EVALUATION_PROMPT} 질문: ${evaluationDto.question}, 답변: ${evaluationDto.answer}`,
-        },
-      ],
-    });
-
-    const result = this.gptService.getChatOpenaiResponse(gptResponse);
-    const resultToJson = JSON.parse(result.result.message.content);
-    return resultToJson;
+  async evaluationByAnswer(@Body() evaluationDto: EvaluationInputDto[]) {
+    let result = [];
+    for (let i = 0; i < evaluationDto.length; i++) {
+      const gptResponse = await this.gptService.generateResponse({
+        messages: [
+          {
+            role: 'user',
+            content: `${process.env.OPENAI_GRADING_EVALUATION_PROMPT} 질문: ${evaluationDto[i].question}, 답변: ${evaluationDto[i].answer}`,
+          },
+        ],
+      });
+      const gptResponseFormat = this.gptService.getChatOpenaiResponse(gptResponse);
+      const resultToJson = JSON.parse(gptResponseFormat.result.message.content);
+      result.push(resultToJson);
+    }
+    return result;
   }
 
   @ApiOperation({ description: 'GPT API에게 면접의 전체적인 평가를 요청하는 API' })
