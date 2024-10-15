@@ -13,20 +13,22 @@ export class GradingController {
   @ApiOperation({ description: 'GPT API에게 답변의 평가를 요청하는 API' })
   @Post('evaluation')
   async evaluationByAnswer(@Body() evaluationDto: EvaluationInputDto[]) {
-    let result = [];
-    for (let i = 0; i < evaluationDto.length; i++) {
-      const gptResponse = await this.gptService.generateResponse({
-        messages: [
-          {
-            role: 'user',
-            content: `${process.env.OPENAI_GRADING_EVALUATION_PROMPT} 질문: ${evaluationDto[i].question}, 답변: ${evaluationDto[i].answer}`,
-          },
-        ],
-      });
-      const gptResponseFormat = this.gptService.getChatOpenaiResponse(gptResponse);
-      const resultToJson = JSON.parse(gptResponseFormat.result.message.content);
-      result.push(resultToJson);
-    }
+    const result = await Promise.all(
+      evaluationDto.map(async (evaluation) => {
+        const gptResponse = await this.gptService.generateResponse({
+          messages: [
+            {
+              role: 'user',
+              content: `${process.env.OPENAI_GRADING_EVALUATION_PROMPT} 질문: ${evaluation.question}, 답변: ${evaluation.answer}`,
+            },
+          ],
+        });
+
+        const gptResponseFormat = this.gptService.getChatOpenaiResponse(gptResponse);
+
+        return gptResponseFormat.result.message.content;
+      }),
+    );
     return result;
   }
 
