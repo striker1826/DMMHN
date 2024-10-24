@@ -29,6 +29,7 @@ export class AuthController {
   @Post('v2/kakao')
   async kakaoLoginTest(@Body() body: SocialLoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.kakaoLoginLocal(body);
+    console.log('result', result);
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,
       sameSite: 'none',
