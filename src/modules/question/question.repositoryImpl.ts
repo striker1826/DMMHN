@@ -32,8 +32,14 @@ export class QuestionRepositoryImpl implements QuestionRepositroy {
     return question;
   }
 
-  async findAllQuestionByStacks(stack: number): Promise<Question[]> {
-    const questionList = await this.questionModel.find({ where: { questionTypeId: stack } });
+  async findAllQuestionByStacks(stack: number, legnth: number): Promise<Question[]> {
+    const questionList = await this.questionModel
+      .createQueryBuilder('question')
+      .where('question.questionTypeId = :stack', { stack })
+      .orderBy('RAND()') // MySQL에서 랜덤 정렬
+      .limit(length) // 최대 5개 가져오기
+      .getMany();
+
     return questionList;
   }
 

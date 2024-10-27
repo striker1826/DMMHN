@@ -78,9 +78,18 @@ export class QuestionService {
     const stackList = stacks.split(',');
     if (stackList.length > 3) throw new BadRequestException('stack은 3개를 초과할 수 없습니다.');
 
+    let length: number;
+    if (stackList.length === 3) {
+      length = 2;
+    } else if (stackList.length === 2) {
+      length = 3;
+    } else if (stackList.length === 1) {
+      length = 6;
+    }
+
     const questionList = await Promise.all(
       stackList.map(async (stack) => {
-        return this.questionRepository.findAllQuestionByStacks(parseInt(stack));
+        return this.questionRepository.findAllQuestionByStacks(parseInt(stack), length);
       }),
     );
 
