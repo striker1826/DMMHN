@@ -20,7 +20,7 @@ export class GptService {
       model: 'gpt-4o',
       messages: prompt.messages,
       temperature: 0.5,
-      max_tokens: 256,
+      max_tokens: 512,
       top_p: 0.5,
       frequency_penalty: 0,
       presence_penalty: 0,
