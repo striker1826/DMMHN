@@ -32,7 +32,7 @@ export class QuestionRepositoryImpl implements QuestionRepositroy {
     return question;
   }
 
-  async findAllQuestionByStacks(stack: number, legnth: number): Promise<Question[]> {
+  async findAllQuestionByStacks(stack: number, length: number): Promise<Question[]> {
     const questionList = await this.questionModel
       .createQueryBuilder('question')
       .where('question.questionTypeId = :stack', { stack })
