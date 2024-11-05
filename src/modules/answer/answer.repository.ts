@@ -1,3 +1,5 @@
-export interface AnswerRepository {}
+export interface AnswerRepository {
+  createUserAnswer(userId: number, question: string, answer: string): Promise<void>;
+}
 
-const AnswerRepository = Symbol('AnswerRepository');
+export const AnswerRepository = Symbol('AnswerRepository');

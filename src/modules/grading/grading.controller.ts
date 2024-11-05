@@ -5,16 +5,24 @@ import { GptService } from '../gpt/gpt.service';
 import { OverallRatingInputDto } from './dto/input/overallRating.dto';
 import { GradingService } from './grading.service';
 import { AuthGuard } from '@nestjs/passport';
+import { AnswerService } from '../answer/answer.service';
+import { User } from 'src/common/decorators/user-decorator';
 
 @Controller('grading')
 export class GradingController {
-  constructor(private readonly gradingService: GradingService, private readonly gptService: GptService) {}
+  constructor(
+    private readonly gradingService: GradingService,
+    private readonly gptService: GptService,
+    private readonly answerService: AnswerService,
+  ) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ description: 'GPT API에게 답변의 평가를 요청하는 API' })
   @Post('evaluation')
-  async evaluationByAnswer(@Body() evaluationDto: EvaluationInputDto[]) {
+  async evaluationByAnswer(@User() userId: number, @Body() evaluationDto: EvaluationInputDto[]) {
     const result = await Promise.all(
       evaluationDto.map(async (evaluation) => {
+        await this.answerService.saveUserAnswer(userId, evaluation.question, evaluation.answer);
         const gptResponse = await this.gptService.generateResponse({
           messages: [
             {

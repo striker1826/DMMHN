@@ -5,9 +5,14 @@ import { GptModule } from '../gpt/gpt.module';
 import { GptService } from '../gpt/gpt.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { AnswerRepository } from './answer.repository';
+import { AnswerRepositoryImpl } from './answer.repositoryImpl';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersAnswer } from 'src/entities/usersAnswer';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([UsersAnswer]),
     GptModule,
     MulterModule.register({
       storage: diskStorage({
@@ -19,6 +24,7 @@ import { diskStorage } from 'multer';
     }),
   ],
   controllers: [AnswerController],
-  providers: [AnswerService, GptService],
+  providers: [AnswerService, { provide: AnswerRepository, useClass: AnswerRepositoryImpl }, GptService],
+  exports: [AnswerService],
 })
 export class AnswerModule {}

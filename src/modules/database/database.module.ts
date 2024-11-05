@@ -7,6 +7,7 @@ import { Result } from 'src/entities/result.entity';
 import { Stack } from 'src/entities/stack';
 import { SubType } from 'src/entities/subType.entity';
 import { User } from 'src/entities/user.entity';
+import { UsersAnswer } from 'src/entities/usersAnswer';
 
 const databaseModule = TypeOrmModule.forRootAsync({
   inject: [ConfigService],
@@ -18,7 +19,7 @@ const databaseModule = TypeOrmModule.forRootAsync({
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Question, SubType, QuestionType, Stack, Result],
+      entities: [User, Question, SubType, QuestionType, Stack, Result, UsersAnswer],
       charset: 'utf8mb4',
       synchronize: false,
       logging: true,

@@ -1,27 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { GptService } from '../gpt/gpt.service';
 import OpenAI from 'openai';
-import { GradingDto } from './dto/gradingDto';
+import { AnswerRepository } from './answer.repository';
 
 @Injectable()
 export class AnswerService {
-  constructor(private readonly gptService: GptService) {}
+  constructor(
+    private readonly gptService: GptService,
+    @Inject(AnswerRepository) private readonly answerRepository: AnswerRepository,
+  ) {}
 
   async getMessagesData(body: { stacks: string[]; question: string; answer: string; previousQuestions: string[] }) {
     const stacksString = body.stacks.join(', ');
-    // const promptStringTypeList = answerDto.map(
-    //   (item) => `질문: ${item.question}. 답변: ${item.answer ? item.answer : '몰라요'}`,
-    // );
 
-    // const role: 'assistant' | 'user' = 'assistant';
-    // const promptGptTypeList = promptStringTypeList.map((prompt) => {
-    //   return { role, content: prompt };
-    // });
-
-    // for (let i = 0; i < promptGptTypeList.length; i++) {
     const response = await this.gptService.generateResponse({
       messages: [
-        // { role: 'system', content: '' },
         {
           role: 'user',
           content:
@@ -36,5 +29,10 @@ export class AnswerService {
 
     const result = this.gptService.getChatOpenaiResponse(response);
     return result;
+  }
+
+  async saveUserAnswer(userId: number, question: string, answer: string) {
+    await this.answerRepository.createUserAnswer(userId, question, answer);
+    return;
   }
 }
