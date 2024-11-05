@@ -14,7 +14,7 @@ export class GptService {
 
   // gptAi로 질문 생성
   async generateResponse(prompt: {
-    messages: { role: 'user' | 'system'; content: string }[];
+    messages: { role: 'user' | 'system' | 'assistant'; content: string }[];
   }): Promise<OpenAI.ChatCompletion> {
     return await this.openAiService.chat.completions.create({
       model: 'gpt-4o',
