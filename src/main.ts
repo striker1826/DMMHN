@@ -11,7 +11,12 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://alstjq.shop', 'https://dmmhn-next-js.vercel.app'],
+    origin: [
+      'http://localhost:3000',
+      'https://alstjq.shop',
+      'https://dmmhn-next-js.vercel.app',
+      'https://dmmhn-test-dev.vercel.app',
+    ],
     credentials: true,
   });
   app.use(
