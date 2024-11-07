@@ -14,6 +14,9 @@ export class User {
   @Column('bigint', { name: 'kakaoId', comment: '유저의 카카오 식별자' })
   kakaoId: number;
 
+  @Column('varchar', { name: 'email', comment: '유저의 이메일', nullable: true })
+  email: string;
+
   @Column('varchar', { name: 'nickname', comment: '유저의 이름' })
   nickname: string;
 
