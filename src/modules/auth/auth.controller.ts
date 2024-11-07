@@ -13,6 +13,8 @@ import { KakaoLoginResponse } from 'src/common/swagger/auth/kakaoLogin';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { MailService } from '../mail/mail.service';
+import { SendEmailDto } from './dto/input/send-email.dto';
+import { ConfirmEmailDto } from './dto/input/confirm-email.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -63,12 +65,12 @@ export class AuthController {
   @ApiOperation({
     description: '이메일 인증번호 발송 API',
   })
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
   @Post('send/authcode')
-  async sendAuthCode(@Body() body: { email: string }) {
+  async sendAuthCode(@Body() body: SendEmailDto) {
     await this.mailService.sendAuthCode(body.email);
     return;
   }
@@ -76,11 +78,12 @@ export class AuthController {
   @ApiOperation({
     description: '이메일 인증 API',
   })
+  @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
   @Post('confirm/authcode')
-  async confirmAuthCode(@Body() body: { email: string; code: string }) {
+  async confirmAuthCode(@Body() body: ConfirmEmailDto) {
     const result = await this.authService.confirmCode(body.email, body.code);
     return result;
   }
