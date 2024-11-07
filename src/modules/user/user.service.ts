@@ -22,6 +22,7 @@ export class UserService {
     }
 
     await this.userRepository.saveEmail(userId, email);
+    await this.cacheManager.del(email + code);
     return;
   }
 }
