@@ -32,7 +32,7 @@ export class UserController {
   }
 
   @ApiOperation({
-    description: '유저의 access_token으로 유저의 정보를 가져오는 API 입니다.',
+    description: '유저의 이메일을 업데이트 하는 API 입니다.',
   })
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse()
