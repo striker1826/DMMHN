@@ -120,6 +120,7 @@ export class AuthService {
     }
 
     await this.cacheManager.del(email);
+    await this.cacheManager.set(email + request_code, true);
     return;
   }
 }

@@ -25,4 +25,9 @@ export class UserRepositoryImpl implements UserRepository {
     const user = await this.userModel.findOne({ where: { userId } });
     return user;
   }
+
+  async saveEmail(userId: number, email: string): Promise<void> {
+    await this.userModel.update({ userId }, { email });
+    return;
+  }
 }
