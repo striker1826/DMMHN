@@ -3,10 +3,13 @@ import { UserRepository } from '../user/user.repository';
 import { SocialLoginDto } from './dto/input/social-login.dto';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager'; // ! Don't forget this import
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @Inject(UserRepository) private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}
@@ -63,9 +66,7 @@ export class AuthService {
     return token;
   }
 
-  async kakaoLoginLocal({
-    code,
-  }: SocialLoginDto): Promise<{
+  async kakaoLoginLocal({ code }: SocialLoginDto): Promise<{
     access_token: string;
     refresh_token: string;
     user: { profileImg: string };
@@ -110,5 +111,15 @@ export class AuthService {
     } catch (err) {
       throw new UnauthorizedException('올바른 인증코드가 아닙니다.');
     }
+  }
+
+  async confirmCode(email: string, request_code: string) {
+    const authCode = await this.cacheManager.get(email);
+    if (authCode !== request_code) {
+      throw new BadRequestException('인증번호가 올바르지 않습니다.');
+    }
+
+    await this.cacheManager.del(email);
+    return;
   }
 }

@@ -1,14 +1,23 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SocialLoginDto } from './dto/input/social-login.dto';
-import { ApiCreatedResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { KakaoLoginResponse } from 'src/common/swagger/auth/kakaoLogin';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { MailService } from '../mail/mail.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly mailService: MailService) {}
 
   @ApiOperation({
     description: '카카오에서 받은 인증 코드로 accessToken을 받을 수 있는 API 입니다.',
@@ -49,5 +58,30 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     return res.json(result).status(200);
+  }
+
+  @ApiOperation({
+    description: '이메일 인증번호 발송 API',
+  })
+  // @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse()
+  @ApiUnauthorizedResponse()
+  @Post('send/authcode')
+  async sendAuthCode(@Body() body: { email: string }) {
+    await this.mailService.sendAuthCode(body.email);
+    return;
+  }
+
+  @ApiOperation({
+    description: '이메일 인증 API',
+  })
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse()
+  @ApiUnauthorizedResponse()
+  @Post('confirm/authcode')
+  async confirmAuthCode(@Body() body: { email: string; code: string }) {
+    const result = await this.authService.confirmCode(body.email, body.code);
+    return result;
   }
 }

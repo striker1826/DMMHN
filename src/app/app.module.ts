@@ -11,9 +11,12 @@ import { GptModule } from 'src/modules/gpt/gpt.module';
 import { StackModule } from 'src/modules/stack/stack.module';
 import { GradingModule } from 'src/modules/grading/grading.module';
 import { FollowQuestionModule } from 'src/modules/follow-question/follow-question.module';
+import { MailModule } from 'src/modules/mail/mail.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register({ isGlobal: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     AuthModule,
@@ -24,6 +27,7 @@ import { FollowQuestionModule } from 'src/modules/follow-question/follow-questio
     StackModule,
     GradingModule,
     FollowQuestionModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
