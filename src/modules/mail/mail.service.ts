@@ -36,6 +36,10 @@ export class MailService {
       console.log(`${to} 주소로 메일이 전송되었습니다.`);
 
       const THREE_MINUTES = 180000;
+      const userAuthCode = await this.cacheManager.get(to);
+      if (userAuthCode) {
+        await this.cacheManager.del(to);
+      }
       await this.cacheManager.set(to, randomString, THREE_MINUTES);
 
       console.log(`인증 코드가 저장되었습니다: to: ${to} code: ${randomString}`);
