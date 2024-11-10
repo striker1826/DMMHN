@@ -15,6 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { MailService } from '../mail/mail.service';
 import { SendEmailDto } from './dto/input/send-email.dto';
 import { ConfirmEmailDto } from './dto/input/confirm-email.dto';
+import { User } from 'src/common/decorators/user-decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -86,5 +87,16 @@ export class AuthController {
   async confirmAuthCode(@Body() body: ConfirmEmailDto) {
     const result = await this.authService.confirmCode(body.email, body.code);
     return result;
+  }
+
+  @ApiOperation({
+    description: '로그인 여부 확인',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiUnauthorizedResponse()
+  @Post('login/check')
+  async isLoginCheck(@User() userId: number) {
+    return { result: true };
   }
 }

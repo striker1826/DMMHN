@@ -40,6 +40,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   @Post('email')
   async saveEmail(@User() userId: number, @Body() body: ConfirmEmailDto) {
+    console.log('userId', userId);
     await this.userService.saveEmail(userId, body.email, body.code);
     return;
   }
