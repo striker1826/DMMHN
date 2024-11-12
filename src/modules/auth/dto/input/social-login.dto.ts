@@ -10,4 +10,12 @@ export class SocialLoginDto {
   @IsString()
   @IsNotEmpty()
   code: string;
+
+  @ApiProperty({
+    description: 'front의 개발환경',
+    type: 'string',
+    example: 'develop',
+  })
+  @IsString()
+  context: string;
 }

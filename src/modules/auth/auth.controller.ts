@@ -97,6 +97,7 @@ export class AuthController {
   @ApiUnauthorizedResponse()
   @Post('login/check')
   async isLoginCheck(@User() userId: number) {
+    console.log(userId);
     return { result: true };
   }
 }

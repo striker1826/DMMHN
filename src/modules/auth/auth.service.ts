@@ -66,19 +66,35 @@ export class AuthService {
     return token;
   }
 
-  async kakaoLoginLocal({ code }: SocialLoginDto): Promise<{
+  async kakaoLoginLocal({ code, context }: SocialLoginDto): Promise<{
     access_token: string;
     refresh_token: string;
     user: { profileImg: string };
     isEmail: boolean;
   }> {
+    let frontContext: string;
+
+    switch (context) {
+      case 'develop':
+        frontContext = process.env.KAKAO_REDIRECT_URI_DEVELOP;
+
+      case 'local':
+        frontContext = process.env.KAKAO_REDIRECT_URI_LOCAL;
+
+      case 'production':
+        frontContext = process.env.KAKAO_REDIRECT_URI_PRODUCTION;
+
+      default:
+        process.env.KAKAO_REDIRECT_URI_PRODUCTION;
+    }
+
     try {
       const kakaoTokenRes = await axios.post(
         'https://kauth.kakao.com/oauth/token',
         {
           grant_type: 'authorization_code',
           client_id: process.env.KAKAO_CLIENT_ID,
-          redirect_uri: process.env.KAKAO_REDIRECT_URI_LOCAL,
+          redirect_uri: frontContext,
           client_secret: process.env.KAKAO_SECRET_KEY,
           code,
         },
