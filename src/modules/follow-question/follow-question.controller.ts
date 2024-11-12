@@ -31,7 +31,7 @@ export class FollowQuestionController {
   }
 
   @ApiOperation({
-    description: '꼬리 질문 면접 시 첫 질문을 불러오는 API',
+    description: '꼬리 질문을 진행하는 API',
   })
   @ApiBearerAuth('access-token')
   @ApiOkResponse(getFirstQuestion.ok)
