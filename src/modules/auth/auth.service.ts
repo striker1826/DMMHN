@@ -72,6 +72,7 @@ export class AuthService {
     user: { profileImg: string };
     isEmail: boolean;
   }> {
+    console.log('context', context);
     try {
       const kakaoTokenRes = await axios.post(
         'https://kauth.kakao.com/oauth/token',
